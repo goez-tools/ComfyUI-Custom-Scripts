@@ -146,9 +146,9 @@ class LoraLoaderWithImages(LoraLoader):
 
 
 class CheckpointLoaderSimpleWithImages(CheckpointLoaderSimple):
-    RETURN_TYPES = (*CheckpointLoaderSimple.RETURN_TYPES, "STRING",)
+    RETURN_TYPES = (*CheckpointLoaderSimple.RETURN_TYPES, "STRING", "STRING",)
     RETURN_NAMES = (*getattr(CheckpointLoaderSimple, "RETURN_NAMES",
-                    CheckpointLoaderSimple.RETURN_TYPES), "example")
+                    CheckpointLoaderSimple.RETURN_TYPES), "example", "model_name")
 
     @classmethod
     def INPUT_TYPES(s):
@@ -158,7 +158,8 @@ class CheckpointLoaderSimpleWithImages(CheckpointLoaderSimple):
 
     def load_checkpoint(self, **kwargs):
         prompt = kwargs.pop("prompt", "")
-        return (*super().load_checkpoint(**kwargs), prompt)
+        model_name = kwargs.get("ckpt_name", "")
+        return (*super().load_checkpoint(**kwargs), prompt, model_name)
 
 
 NODE_CLASS_MAPPINGS = {
